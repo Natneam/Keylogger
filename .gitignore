@@ -1,1 +1,7 @@
 log.txt
+*.exe
+*.spec
+
+/dist
+/venv
+/build
